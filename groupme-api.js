@@ -12,9 +12,9 @@ const helptext = "Prayer Bot Commands:\n" +
 const botid = process.env.BOT_ID
 console.log("BOT ID = "+botid)
 const accesstoken = process.env.ACCESS_TOKEN
-console.log("BOT ID = "+accesstoken)
+console.log("Access token = "+accesstoken)
 const groupid = process.env.GROUP_ID
-console.log("BOT ID = "+groupid)
+console.log("Group ID = "+groupid)
 
 if (!accesstoken) {
     console.log("ENV: 'ACCESS_TOKEN' is undefined")
@@ -58,6 +58,7 @@ const getMyLikeList = async () => {
 
         if (response.statusCode == 200) {
             const likedMessageList = response.body.response.messages
+            console.log("Printing liked messages...\n"+response.body.response.messages)
             console.log("Successfully retrieved liked message list")
             return likedMessageList
         }
