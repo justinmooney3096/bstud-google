@@ -1,161 +1,121 @@
-# Cloud Run Template Microservice
+# Sample GroupMe NodeJS Callback Bot
 
-A template repository for a Cloud Run microservice, written in Node.js. 
+## Introduction
 
-[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+This project shows the capability of a bot to react to messages sent within a group.
 
-## Prerequisite
+## Contents
 
-* Enable the Cloud Run API via the [console](https://console.cloud.google.com/apis/library/run.googleapis.com?_ga=2.124941642.1555267850.1615248624-203055525.1615245957) or CLI:
+- Quickly get our sample bot up and running in your groups
+- Deploy the code to heroku
+- Create a bot
+- Configure to your bot's credentials
+- Make changes to the bot
+- Pull the code down to your local machine
+- Configure the local environment variables to your bot's credentials
 
-```bash
-gcloud services enable run.googleapis.com
+## Requirements
+
+- GroupMe account
+- Heroku account
+
+# Get your bot up and running<a name="deploy"></a>
+
+## Deploy to Heroku
+
+Be sure to log into heroku, using your heroku credentials.
+
+Optionally, you can give your app a name, or instead leave
+it blank and let Heroku name it for you (you can change it later).
+
+## Next, create a GroupMe Bot
+
+Go to:
+https://dev.groupme.com/session/new
+
+Use your GroupMe credentials to log into the developer site.
+
+Once you have successfully logged in, go to https://dev.groupme.com/bots/new
+
+Create your new bot
+
+Fill out the form to create your new bot:
+
+- Select the group where you want the bot to live
+- Give your bot a name
+- Paste in the url to your newly deply heroku app
+  - `http://your-app-name-here.herokuapp.com/`
+- (Optional) Give your bot an avatar by providing a url to an image
+- Click submit
+
+## Find your Bot ID:<a name="get-bot-id"></a>
+
+Go here to view all of your bots:
+https://dev.groupme.com/bots
+
+Click on the one you just created.
+
+Select your new bot and copy the Bot ID.
+
+## Add your Bot ID to your Heroku app:
+
+Go here to see all of your Heroku apps and select the one you just created before:
+
+https://dashboard-next.heroku.com/apps
+
+Select your heroku app and click settings in the top navigation.
+
+On your app's setting page, find the Config Vars section and click the Reveal Config Vars button.
+
+Fill out the form to add an environment variable to your app:
+
+- In the "key" field type: BOT_ID
+- In the "value" field paste your Bot ID that you copied in the previous steps
+- Do the same for ACCESS_TOKEN (Grou me access token) and GROUP_ID (Group me group id)
+- Click the save button
+
+In the home dir of the project, create a .env file and add the contents below:
+
+```text
+BOT_ID="some_id"
+ACCESS_TOKEN="some_token"
+GROUP_ID="some_id"
 ```
 
-## Features
+## Now go test your bot
 
-* **Express**: Web server framework
-* **Buildpack support** Tooling to build production-ready container images from source code and without a Dockerfile
-* **Dockerfile**: Container build instructions, if needed to replace buildpack for custom build
-* **SIGTERM handler**: Catch termination signal for cleanup before Cloud Run stops the container
-* **Service metadata**: Access service metadata, project Id and region, at runtime
-* **Local development utilities**: Auto-restart with changes and prettify logs
-* **Structured logging w/ Log Correlation** JSON formatted logger, parsable by Cloud Logging, with [automatic correlation of container logs to a request log](https://cloud.google.com/run/docs/logging#correlate-logs).
-* **Unit and System tests** Basic unit and system tests setup for the microservice
+Go to GroupMe and type, "/pray", "/praise", "/list", "/cool", "/everyone", or "/help" in the group where your bot lives to see it in action.
 
-## Local Development
+# Make it your own<a name="pull"></a>
 
-### Cloud Code
+## Pull the code to your local machine
 
-This template works with [Cloud Code](https://cloud.google.com/code), an IDE extension
-to let you rapidly iterate, debug, and run code on Kubernetes and Cloud Run.
+Within terminal, change directory to the location where you would like the files to live, then run this command:
 
-Learn how to use Cloud Code for:
+```bash
+$ heroku git:clone -a YOUR_APP_NAME_HERE
+```
 
-* Local development - [VSCode](https://cloud.google.com/code/docs/vscode/developing-a-cloud-run-service), [IntelliJ](https://cloud.google.com/code/docs/intellij/developing-a-cloud-run-service)
+And then change directory into the new folder
 
-* Local debugging - [VSCode](https://cloud.google.com/code/docs/vscode/debugging-a-cloud-run-service), [IntelliJ](https://cloud.google.com/code/docs/intellij/debugging-a-cloud-run-service)
+```bash
+$ cd YOUR_APP_NAME_HERE
+```
 
-* Deploying a Cloud Run service - [VSCode](https://cloud.google.com/code/docs/vscode/deploying-a-cloud-run-service), [IntelliJ](https://cloud.google.com/code/docs/intellij/deploying-a-cloud-run-service)
-* Creating a new application from a custom template (`.template/templates.json` allows for use as an app template) - [VSCode](https://cloud.google.com/code/docs/vscode/create-app-from-custom-template), [IntelliJ](https://cloud.google.com/code/docs/intellij/create-app-from-custom-template)
+## Start the server
 
-### CLI tooling
+To test your bot locally, open terminal and run the following command to start a local server.
 
-#### Local development
+```bash
+node index.js
+```
 
-1. Set Project Id:
-    ```bash
-    export GOOGLE_CLOUD_PROJECT=<GCP_PROJECT_ID>
-    ```
-2. Start the server with hot reload:
-    ```bash
-    npm run dev
-    ```
+Then navigate to `http://127.0.0.1:5000/` in a browser.
 
-#### Deploying a Cloud Run service
+You can also run the test script by running
 
-1. Set Project Id:
-    ```bash
-    export GOOGLE_CLOUD_PROJECT=<GCP_PROJECT_ID>
-    ```
+```bash
+node test.js
+```
 
-1. Enable the Artifact Registry API:
-    ```bash
-    gcloud services enable artifactregistry.googleapis.com
-    ```
-
-1. Create an Artifact Registry repo:
-    ```bash
-    export REPOSITORY="samples"
-    export REGION=us-central1
-    gcloud artifacts repositories create $REPOSITORY --location $REGION --repository-format "docker"
-    ```
-  
-1. Use the gcloud credential helper to authorize Docker to push to your Artifact Registry:
-    ```bash
-    gcloud auth configure-docker
-    ```
-
-2. Build the container using a buildpack:
-    ```bash
-    npm run build
-    ```
-    
-3. Deploy to Cloud Run:
-    ```bash
-    npm run deploy
-    ```
-
-### Run sample tests
-
-1. [Pass credentials via `GOOGLE_APPLICATION_CREDENTIALS` env var](https://cloud.google.com/docs/authentication/production#passing_variable):
-    ```bash
-    export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
-    ```
-
-2. Set Project Id:
-    ```bash
-    export GOOGLE_CLOUD_PROJECT=<GCP_PROJECT_ID>
-    ```
-3. Run unit tests
-    ```bash
-    npm run test
-    ```
-
-4. Run system tests
-    ```bash
-    gcloud builds submit \
-        --config test/advance.cloudbuild.yaml \
-        --substitutions 'COMMIT_SHA=manual'
-    ```
-    The Cloud Build configuration file will build and deploy the containerized service
-    to Cloud Run, run tests managed by NPM, then clean up testing resources. This configuration restricts public
-    access to the test service. Therefore, service accounts need to have the permission to issue Id tokens for request authorization:
-    * Enable Cloud Run, Cloud Build, Artifact Registry, and IAM APIs:
-        ```bash
-        gcloud services enable run.googleapis.com cloudbuild.googleapis.com iamcredentials.googleapis.com artifactregistry.googleapis.com
-        ```
-
-    * Set environment variables.
-        ```bash
-        export PROJECT_ID="$(gcloud config get-value project)"
-        export PROJECT_NUMBER="$(gcloud projects describe $(gcloud config get-value project) --format='value(projectNumber)')"
-        ```
-
-    * Create an Artifact Registry repo (or use another already created repo):
-        ```bash
-        export REPOSITORY="samples"
-        export REGION=us-central1
-        gcloud artifacts repositories create $REPOSITORY --location $REGION --repository-format "docker"
-        ```
-  
-    * Create service account `token-creator` with `Service Account Token Creator` and `Cloud Run Invoker` roles.
-        ```bash
-        gcloud iam service-accounts create token-creator
-
-        gcloud projects add-iam-policy-binding $PROJECT_ID \
-            --member="serviceAccount:token-creator@$PROJECT_ID.iam.gserviceaccount.com" \
-            --role="roles/iam.serviceAccountTokenCreator"
-        gcloud projects add-iam-policy-binding $PROJECT_ID \
-            --member="serviceAccount:token-creator@$PROJECT_ID.iam.gserviceaccount.com" \
-            --role="roles/run.invoker"
-        ```
-
-    * Add `Service Account Token Creator` role to the Cloud Build service account.
-        ```bash
-        gcloud projects add-iam-policy-binding $PROJECT_ID \
-            --member="serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com" \
-            --role="roles/iam.serviceAccountTokenCreator"
-        ```
-
-## Maintenance & Support
-
-This repo performs basic periodic testing for maintenance. Please use the issue tracker for bug reports, features requests and submitting pull requests.
-
-## Contributions
-
-Please see the [contributing guidelines](CONTRIBUTING.md)
-
-## License
-
-This library is licensed under Apache 2.0. Full license text is available in [LICENSE](LICENSE).
+## All done! Go play around and make the bot your own
