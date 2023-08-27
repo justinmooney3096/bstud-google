@@ -10,8 +10,11 @@ const helptext = "Prayer Bot Commands:\n" +
                   "/event - Mention everyone attending the next event\n"
 
 const botid = process.env.BOT_ID
+console.log("BOT ID = "+botid)
 const accesstoken = process.env.ACCESS_TOKEN
+console.log("BOT ID = "+accesstoken)
 const groupid = process.env.GROUP_ID
+console.log("BOT ID = "+groupid)
 
 if (!accesstoken) {
     console.log("ENV: 'ACCESS_TOKEN' is undefined")
@@ -55,7 +58,7 @@ const getMyLikeList = async () => {
 
         if (response.statusCode == 200) {
             const likedMessageList = response.body.response.messages
-            console.log("success")
+            console.log("Successfully retrieved liked message list")
             return likedMessageList
         }
         return []
@@ -263,7 +266,7 @@ const createMention = async (slashtext) => {
 
 // Tell the bot to create a post within its group
 const createPost = async (message, userIds) => {
-    console.log(`Creating new post (${message.length}): ${message}`)
+    console.log(`Creating new post (${message.length}):\n${message}`)
     const postPath = "/v3/bots/post"
     const destUrl = new URL(postPath, baseurl)
 
@@ -284,6 +287,7 @@ const createPost = async (message, userIds) => {
         }
     } else {
         console.log("Just a regular post...")
+        console.log("Bot ID again = "+botid)
         payload = {
           "bot_id": botid,
           "text": message,
