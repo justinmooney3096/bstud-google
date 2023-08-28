@@ -51,7 +51,7 @@ const getMyLikeList = async () => {
     // GET /groups/:group_id/likes/mine
     try {
         const myLikePath = `/v3/groups/${groupid}/likes/mine?token=${accesstoken}`
-        const destUrl = new URL(myLikePath, baseurl)
+        let destUrl = new URL(myLikePath, baseurl)
         console.log("Type of variable destURL = "+typeof(destUrl))
         console.log("destURL = "+destUrl)
         destUrl = baseurl+myLikePath
