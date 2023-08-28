@@ -57,7 +57,11 @@ const getMyLikeList = async () => {
         destUrl = baseurl+myLikePath
         console.log("Type of variable destURL = "+typeof(destUrl))
         console.log("destURL = "+destUrl)
-        const response = await got.get(destUrl).json()
+        const response = await got.get(destUrl)
+        console.log("Response:\n"+response)
+        const response2 = await got.get("https://api.groupme.com/v3/groups/87218834/likes/mine?token=62xYnHTa1xJOm7PBD0aga92Z9TgSyLpiZWVlytj8")
+        console.log("Response w/ direct URL:\n"+response2)
+        //const response = await got.get(destUrl).json()
         //const response = await got(destUrl, {
         //    responseType: "json"
         //})
