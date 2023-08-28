@@ -2,7 +2,7 @@ require("dotenv").config()
 const got = require("got")
 const { URL } = require("url")
 
-const baseurl = "https://api.groupme.com/"
+const baseurl = "https://api.groupme.com/v3/"
 const helptext = "Prayer Bot Commands:\n" +
                   "/pray - Submit something you'd like prayer for\n" +
                   "/praise - Submit something you want to praise\n" +
@@ -26,7 +26,7 @@ if (!groupid) {
 // msgId: str
 // The bot uses the owner's credential to like a message with msgId
 const likeMessage = async (msgId) => {
-    const likePath = `/v3/messages/${groupid}/${msgId}/like?token=${accesstoken}`
+    const likePath = `messages/${groupid}/${msgId}/like?token=${accesstoken}`
     const destUrl = new URL(likePath, baseurl)
     console.log(`Liking message: ${msgId}`)
     const response = await got.post(destUrl, {
@@ -50,7 +50,7 @@ const postPrayerRequestList = async () => {
 const getMyLikeList = async () => {
     // GET /groups/:group_id/likes/mine
     try {
-        const myLikePath = `/v3/groups/${groupid}/likes/mine?token=${accesstoken}`
+        const myLikePath = `groups/${groupid}/likes/mine?token=${accesstoken}`
         let destUrl = new URL(myLikePath, baseurl)
         console.log("Type of variable destURL = "+typeof(destUrl))
         console.log("destURL = "+destUrl)
@@ -194,7 +194,7 @@ const postMsgList = async (msgList) => {
 
 // Get members
 const getMembers = async () => {
-  const getpath = `/v3/groups/${groupid}?token=${accesstoken}`
+  const getpath = `groups/${groupid}?token=${accesstoken}`
   const desturl = new URL(getpath, baseurl)
   const response = await got(desturl, {
       responseType: "json"
@@ -210,7 +210,7 @@ const getMembers = async () => {
 
 // Get admins/owners
 const getAdmins = async () => {
-  const getpath = `/v3/groups/${groupid}?token=${accesstoken}`
+  const getpath = `groups/${groupid}?token=${accesstoken}`
   const desturl = new URL(getpath, baseurl)
   const response = await got(desturl, {
       responseType: "json"
@@ -251,7 +251,7 @@ const createMention = async (slashtext) => {
   const groupmeAPIOptions = {
     agent: false,
     host: "api.groupme.com",
-    path: "/v3/bots/post",
+    path: "bots/post",
     port: 443,
     method: "POST",
     headers: {
@@ -275,7 +275,7 @@ const createMention = async (slashtext) => {
 // Tell the bot to create a post within its group
 const createPost = async (message, userIds) => {
     console.log(`Creating new post (${message.length}):\n${message}`)
-    const postPath = "/v3/bots/post"
+    const postPath = "bots/post"
     const destUrl = new URL(postPath, baseurl)
 
     // use different method to post with attachments
@@ -316,7 +316,7 @@ const createPost = async (message, userIds) => {
 
 // Returns all your bots and their info
 const getBots = async () => {
-    const groupPath = `/v3/bots?token=${accesstoken}`
+    const groupPath = `bots?token=${accesstoken}`
     const destUrl = new URL(groupPath, baseurl)
     const response = await got(destUrl, {
         responseType: "json"
@@ -339,7 +339,7 @@ const getUsersAttendingEvent = async () => {
     const limit = 1
 
     // accesstoken must ALWAYS be included in path
-    const groupPath = `v3/conversations/${groupid}/events/list?end_at=${currentDate}&limit=${limit}&token=${accesstoken}`
+    const groupPath = `conversations/${groupid}/events/list?end_at=${currentDate}&limit=${limit}&token=${accesstoken}`
     const destUrl = new URL(groupPath, baseurl)
     console.log("destUrl = " + destUrl)
     const response = await got(destUrl, {
