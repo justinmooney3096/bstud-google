@@ -62,13 +62,14 @@ const getMyLikeList = async () => {
         const response2 = await got.get("https://api.groupme.com/v3/groups/87218834/likes/mine?token=62xYnHTa1xJOm7PBD0aga92Z9TgSyLpiZWVlytj8")
         console.log("Response w/ direct URL:\n"+response2)
         //const response = await got.get(destUrl).json()
-        //const response = await got(destUrl, {
-        //    responseType: "json"
-        //})
+        const response3 = await got(destUrl, {
+            responseType: "json"
+        })
+        console.log("Response3: \n"+response3)
 
         if (response.statusCode == 200) {
             console.log("Received 200 status code")
-            const likedMessageList = response.body.response
+            const likedMessageList = response
             console.log("Printing likedMessageList:\n"+likedMessageList)
             console.log("Printing liked messages (response)...\n"+response)
             console.log("Successfully retrieved liked message list")
