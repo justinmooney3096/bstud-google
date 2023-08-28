@@ -53,7 +53,7 @@ const getMyLikeList = async () => {
         const myLikePath = `/v3/groups/${groupid}/likes/mine?token=${accesstoken}`
         const destUrl = new URL(myLikePath, baseurl)
         console.log("destURL = "+destUrl)
-        console.log("Type of variable destURL = "|typeof(destUrl))
+        console.log("Type of variable destURL = "+typeof(destUrl))
         const response = await got.get(destUrl).json()
         //const response = await got(destUrl, {
         //    responseType: "json"
